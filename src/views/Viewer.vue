@@ -34,7 +34,7 @@ export default {
   },
   mounted() {
     const bimdataViewer = makeBIMDataViewer({
-      locale: "fr",
+      locale: "en",
       api: {
         cloudId: this.$route.query.cloudId,
         projectId: this.$route.query.projectId,
