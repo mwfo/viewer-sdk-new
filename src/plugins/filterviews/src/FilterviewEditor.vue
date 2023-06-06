@@ -1,7 +1,6 @@
 <template>
   <div class="editor">
-    
-    <div class="editor-header">
+        <div class="editor-header">
 <!--       <BIMDataInput class="editor-header-title" v-model="title" margin="0px 0px" /> -->
       <DatalistInput 
         :key="title"
@@ -31,9 +30,17 @@
       </div>
     </div>
     <div class="editor-table">
-      <div class="editor-table-item title" v-for="item in editor.columns" :key="'title' + item">{{ item }}</div>
+      <div class="editor-table-item title">{{ $t("FilterviewsPlugin.elementType") }}</div>
+      <div class="editor-table-item title">{{ $t("FilterviewsPlugin.pset") }}</div>
+      <div class="editor-table-item title">{{ $t("FilterviewsPlugin.property") }}</div>
+      <div class="editor-table-item title">{{ $t("FilterviewsPlugin.operator") }}</div>
+      <div class="editor-table-item title">{{ $t("FilterviewsPlugin.value") }}</div>
+      <div class="editor-table-item title">{{ $t("FilterviewsPlugin.action") }}</div>
+      <div class="editor-table-item title"></div>
+      <div class="editor-table-item title"></div>
+      
+      
       <template v-for="(item, index) in rows">
-
 
         <DatalistInput 
         class="editor-table-item" 
@@ -55,28 +62,26 @@
         :options="getPropertyOptions(index)"
         :disabled="isPropertyInputDisabled(index)" />
 
-
-          <DatalistInput 
+        <DatalistSelect
         class="editor-table-item" 
-        :type="'select'"
         :key="index + '-operator' + refreshInput"
         v-model="rows[index].operator"
-        :options="getOperatorOptions(index)" 
+        :options="operators"
+        :useKey="true" 
         :disabled="isOperatorInputDisabled(index)" />
 
           <DatalistInput 
         class="editor-table-item" 
-        :type="text"
+        :dropdown="false"
         :key="index + '-value' + refreshInput"
         v-model="rows[index].value"
         :disabled="isValueInputDisabled(index)" />
 
-        <DatalistInput 
+        <DatalistSelect
         class="editor-table-item" 
-        :type="'select'"
         :key="index + '-action' + refreshInput"
         v-model="rows[index].action"
-        :options="editor.actions" 
+        :options="editor.actions"
         />
         
         <input type="color" v-if="isColorDisabled(index)" disabled value="#aaaaaa" class="editor-table-item"
@@ -103,14 +108,17 @@
 
 <script>
 import useFavorites from './composables/useFavorites';
+import useOperators from './composables/useOperators';
 import DatalistInput from './DatalistInput.vue';
+import DatalistSelect from './DatalistSelect.vue';
 
 export default {
   setup(){
-    const favorites = useFavorites()
-    return favorites
+    const {favorites} = useFavorites()
+    const {operators} = useOperators()
+    return {favorites, operators}
   },
-  components: {DatalistInput},
+  components: {DatalistInput, DatalistSelect},
   props: ["elements", "selectedFilterview", "filterviews"],
   data() {
     return {
@@ -120,8 +128,6 @@ export default {
       isPublic: false,
       isNew: false,
       editor: {
-        columns: ["Elementtyp", "Pset", "Eigenschaft", "Operator", "Wert", "Aktion", "", ""],
-        operators: ["equals", "is defined", "contains", "is in"],
         actions: ["Add", "Remove", "Color", "Autocolor"],
       },
       refreshInput: 0,
@@ -160,6 +166,7 @@ export default {
     selectedFilterview() {
       if (this.selectedFilterview) {
         this.loadFilterview()
+        console.log(this.rows)
       } else {
         this.resetFilterview()
       }
@@ -249,10 +256,7 @@ export default {
       }
     },
     isValueInputDisabled(rowIndex) {
-      let validOperators = ['equals', 'contains', 'is in']
-      let isValidOperator = validOperators.includes(this.rows[rowIndex].operator)
-      isValidOperator || (this.rows[rowIndex].value = null)
-      return !isValidOperator
+      return !this.operators[this.rows[rowIndex].operator].valueInput
     },
     isColorDisabled(rowIndex) {
       let validActions = ['Color']

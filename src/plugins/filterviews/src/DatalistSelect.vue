@@ -1,11 +1,12 @@
 <template>
     <div :style="propStyle">
-        <input ref="input" type="text" v-model="localValue" @blur="$emit('input', localValue)"
-            :disabled="disabled" :readonly="isSelect"/>
-        <div v-if="dropdown" class="dropdown" :style="propStyle">
-            <div class="item" v-for="(item, index) in currentElements" :key="index" @mousedown="localValue = item">
-                {{ item}}
-            </div>
+        <input ref="input" type="text" :class="{select: !disabled}" 
+        :value="!useKey ? localValue : localValue && $t(`FilterviewsPlugin.${localValue}`)" 
+        @blur="$emit('input', localValue)"
+            :disabled="disabled" readonly/>
+        <div class="dropdown" :style="propStyle">
+            <div class="item" v-for="(item, index) in optionsList" :key="index" @mousedown="localValue = item">{{
+                useKey ? $t(`FilterviewsPlugin.${item}`) : item}}</div>
         </div>
     </div>
 </template>
@@ -32,10 +33,11 @@ export default {
             type: String,
             default: '8em'
         },
-        dropdown: {
+        useKey: {
             type: Boolean,
-            default: true
-        },       
+            default: false
+        }
+        
     },
     data(){
         return{
@@ -47,19 +49,18 @@ export default {
         this.localValue = this.value 
     },
     computed: {
-        currentElements() {
-            if (this.localValue == null || this.type == 'select') {
-                return this.options
+        optionsList(){
+            if(this.useKey){
+                return Object.keys(this.options).filter(item => item !== 'null')
             } else {
-                let regex = new RegExp(this.localValue.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/[*?]/g, '\.$&'), "i")
-                return this.options.filter(item => regex.test(item))
+                return this.options
             }
         },
         propStyle() {
             return {
                 width: this.width,
             }
-        },
+        }
     },
 }
 </script>

@@ -15,11 +15,29 @@ export default {
     },
   },
   i18n: {
-    en: {
-      tooltip: 'Filterviews!'
+    de: {
+      elementType: "Element",
+      pset: "Pset",
+      property: "Eigenschaft",
+      operator: "Operator",
+      value: "Wert",
+      action: "Aktion",
+      equals: "ist gleich",
+      defined: "ist definiert",
+      contains: "enthält",
+      in: "enthalten in"
     },
-    fr: {
-      tooltip: 'Filterviews!'
+    en: {
+      elementType: "Element",
+      pset: "Pset",
+      property: "Property",
+      operator: "Operator",
+      value: "Value",
+      action: "Action",
+      equals: "equals",
+      defined: "is defined",
+      contains: "contains",
+      in: "is in"
     },
   },
 };
