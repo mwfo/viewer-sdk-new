@@ -21,7 +21,7 @@
           <BIMDataIcon name="delete" size="xxs" fill color="default" />
         </BIMDataButton>
         <BIMDataButton width="3em" height="2em" color="primary" fill radius @click="handleDuplicate">
-          Duplicate
+          <BIMDataIcon name="storey" size="xxs" fill color="default" />
         </BIMDataButton>
 
         <div class="editor-close" @click="handleClose">
@@ -88,18 +88,14 @@
         <input type="color" v-if="isColorDisabled(index)" disabled value="#aaaaaa" class="editor-table-item"
           :key="index + '-disabled-color' + refreshInput">
         <input type="color" v-else class="editor-table-item" :key="index + '-color'" v-model="rows[index].color" />
-
-        <BIMDataDropdownMenu :key="index + 'menu'" width="100%" :disabled="false" directionClass="down">
-          <template #header>
-            <BIMDataIcon name="burgerMenu" fill color="default" size="m" />
-          </template>
-          <template #element>
-            <ul class="bimdata-list">
-              <li v-for="element of ['Move up', 'Remove', 'Duplicate', 'Move down']" :key="element" :data-rowid="index"
-                @click="handleRowMenu">{{ element }}</li>
-            </ul>
-          </template>
-        </BIMDataDropdownMenu>
+        <div class="editor-row-menu" :key="index + 'menu'">
+        <div>
+          <div class="editor-row-menu-updown" :data-rowid="index" @click="handleRowMenu('Move up', index)">❮</div>
+          <div class="editor-row-menu-updown" :data-rowid="index" @click="handleRowMenu('Move down', index)">❯</div>
+        </div>
+          <div class="editor-row-menu-updown" :data-rowid="index" @click="handleRowMenu('Duplicate', index)"><BIMDataIcon name="storey" size="xs" fill color="default" /></div>
+          <div class="editor-row-menu-updown" :data-rowid="index" @click="handleRowMenu('Delete', index)"><BIMDataIcon name="delete" size="xs" fill color="default" /></div>
+        </div>
       </template>
       <BIMDataButton class="buttonAdd" width="100%" color="default" outline square @click="addEditorRow"><span
           style="font-size: 2em; font-weight: bold">＋</span></BIMDataButton>
@@ -267,9 +263,7 @@ export default {
       let isValidAction = validActions.includes(this.rows[rowIndex].action)
       return !isValidAction
     },
-    handleRowMenu(event) {
-      let index = event.target.dataset.rowid
-      let action = event.target.innerText
+    handleRowMenu(action, index) {
       switch (action) {
         case "Move up":
           if (index > 0) {
@@ -289,15 +283,15 @@ export default {
           this.rows = this.rows.toSpliced(index, 0, {...this.rows[index]})
           this.refreshInput++
           break;
-        case "Remove":
+        case "Delete":
           this.rows.splice(index, 1)
           if (this.rows.length === 0) {
             this.addEditorRow()
           }
           this.refreshInput++
           break;
-      }
-    },
+        }
+  }
   },
   mounted() {
     if (this.selectedFilterview) {
@@ -389,6 +383,22 @@ export default {
       grid-column: 1 / 9;
       margin-top: 0.25em
     }
+  }
+
+  &-row-menu {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    &-updown{
+      cursor: pointer;
+      padding: 0.2em;
+      writing-mode: vertical-lr;
+    
+    &:hover{
+      font-weight: bold;
+    }
+    }
+
   }
 
   .bimdata-select{
