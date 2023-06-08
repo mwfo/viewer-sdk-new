@@ -163,10 +163,9 @@ export default {
     }
   },
   watch: {
-    selectedFilterview() {
+    selectedFilterview() {     
       if (this.selectedFilterview) {
         this.loadFilterview()
-        console.log(this.rows)
       } else {
         this.resetFilterview()
       }
@@ -207,6 +206,7 @@ export default {
       this.rows = JSON.parse(description)
       this.prevRows = description
       this.isNew = false
+      this.refreshInput++
     },
     resetFilterview() {
       this.title = 'New Filterview'
