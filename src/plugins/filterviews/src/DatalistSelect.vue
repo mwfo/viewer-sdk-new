@@ -50,6 +50,7 @@ export default {
     },
     computed: {
         optionsList(){
+            console.log(this.options)
             if(this.useKey){
                 return Object.keys(this.options).filter(item => item !== 'null')
             } else {

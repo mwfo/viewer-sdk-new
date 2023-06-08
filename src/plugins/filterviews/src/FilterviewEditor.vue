@@ -81,7 +81,8 @@
         class="editor-table-item" 
         :key="index + '-action' + refreshInput"
         v-model="rows[index].action"
-        :options="editor.actions"
+        :options="actions"
+        :useKey="true"
         />
         
         <input type="color" v-if="isColorDisabled(index)" disabled value="#aaaaaa" class="editor-table-item"
@@ -109,6 +110,8 @@
 <script>
 import useFavorites from './composables/useFavorites';
 import useOperators from './composables/useOperators';
+import useActions from './composables/useActions';
+
 import DatalistInput from './DatalistInput.vue';
 import DatalistSelect from './DatalistSelect.vue';
 
@@ -116,7 +119,8 @@ export default {
   setup(){
     const {favorites} = useFavorites()
     const {operators} = useOperators()
-    return {favorites, operators}
+    const { actions } = useActions()
+    return {favorites, operators, actions}
   },
   components: {DatalistInput, DatalistSelect},
   props: ["elements", "selectedFilterview", "filterviews"],

@@ -22,10 +22,17 @@ export default {
       operator: "Operator",
       value: "Wert",
       action: "Aktion",
+
       equals: "ist gleich",
       defined: "ist definiert",
       contains: "enthält",
-      in: "enthalten in"
+      in: "enthalten in",
+
+      add: "Hinzufügen",
+      remove: "Entfernen",
+      color: "Einfärben",
+      transparent: "Transparent",
+      autocolor: "Autom. einfärben",
     },
     en: {
       elementType: "Element",
@@ -34,10 +41,17 @@ export default {
       operator: "Operator",
       value: "Value",
       action: "Action",
+
       equals: "equals",
       defined: "is defined",
       contains: "contains",
-      in: "is in"
+      in: "is in",
+
+      add: "Add",
+      remove: "Remove",
+      color: "Color",
+      transparent: "Transparent",
+      autocolor: "Autocolor",
     },
   },
 };

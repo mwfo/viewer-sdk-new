@@ -72,33 +72,37 @@ export default {
                 this.showAndColorElements(ids, color);
             }
         },
-        resetView() {
-            //uncolor all Objects
-            this.$viewer.state.colorizeObjects(
-                this.$viewer.state.objects.map((item) => item.id), "#aaaaaa"
-            );
+        resetView(hide=false) {
+            let ids = this.$viewer.state.objects.map((item) => item.id)
+            this.$viewer.state.colorizeObjects(ids, "#aaaaaa"); //uncolor all Objects
+            this.$viewer.state.unxrayObjects(ids) //remove Transparency
             //show all Objects
-            this.$viewer.state.showObjects(this.$viewer.state.objects.map((item) => item.id));
+            if(!hide){
+                this.$viewer.state.showObjects(ids)
+            } else {
+                this.$viewer.state.hideObjects(ids)
+            }
         },
         showFilterviewResult() {
-            //uncolor all Objects
-            this.$viewer.state.colorizeObjects(
-                this.$viewer.state.objects.map((item) => item.id),
-                "#aaaaaa"
-            );
-            //hide all Objects
-            this.$viewer.state.hideObjects(this.$viewer.state.objects.map((item) => item.id));
+            this.resetView(true)
+            
             //show selected ids
             this.$viewer.state.showObjectsByUuids(this.filterviewResult.visible);
+
+            //make selected ids transparent
+            this.$viewer.state.xrayObjectsByUuids(this.filterviewResult.transparent)
+
             //color Ids in order if Rows
             for (const { color, ids } of Object.values(this.filterviewResult.colored)) {
                 this.$viewer.state.colorizeObjectsByUuids(ids, color);
             }
+
             //autocolored Elements, always last action, will overwrite all other colors
             for (const { color, ids } of Object.values(this.filterviewResult.autocolored)) {
                 this.$viewer.state.colorizeObjectsByUuids(ids, color);
             }
         },
+        //should be merged with showFilterview...
         showAndColorElements(ids, color = "#aaaaaa") {
             //hide all Objects
             this.$viewer.state.hideObjects(this.$viewer.state.objects.map((item) => item.id));
