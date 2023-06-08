@@ -128,7 +128,7 @@ export default {
       isPublic: false,
       isNew: false,
       editor: {
-        actions: ["Add", "Remove", "Color", "Autocolor"],
+        actions: ["add", "remove", "color", "autocolor"],
       },
       refreshInput: 0,
     }
@@ -180,7 +180,7 @@ export default {
   },
   methods: {
     addEditorRow() {
-      this.rows.push({ element: null, pset: null, property: null, value: null, operator: null, color: "#ff0000", action: "Add" })
+      this.rows.push({ element: null, pset: null, property: null, value: null, operator: null, color: "#ff0000", action: "add" })
     },
     async handleSave() {
       let data = {

@@ -166,7 +166,7 @@ export default {
   },
   created() {
 
-
+    
     this.cloudUrl = `${this.$viewer.api.apiUrl}/cloud/${this.$viewer.api.cloudId}/project/${this.$viewer.api.projectId}`
     this.bcfUrl = `${this.$viewer.api.apiUrl}/bcf/2.1/projects/${this.$viewer.api.projectId}`
 
