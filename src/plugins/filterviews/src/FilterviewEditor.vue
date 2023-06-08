@@ -263,7 +263,7 @@ export default {
       return !this.operators[this.rows[rowIndex].operator].valueInput
     },
     isColorDisabled(rowIndex) {
-      let validActions = ['Color']
+      let validActions = ['color']
       let isValidAction = validActions.includes(this.rows[rowIndex].action)
       return !isValidAction
     },
@@ -292,8 +292,9 @@ export default {
         case "Remove":
           this.rows.splice(index, 1)
           if (this.rows.length === 0) {
-            this.addRow()
+            this.addEditorRow()
           }
+          this.refreshInput++
           break;
       }
     },
