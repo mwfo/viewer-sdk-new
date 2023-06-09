@@ -3,7 +3,7 @@
         <h2>Results</h2>
         <ul>
             <li v-for="(item, name, index) in filterviewResult.autocolored" :key="index"
-                :class="{ selected: selectedResult === name }" @click="handleSelectResult(name)">
+                :class="{ selected: selectedResult.includes(name) }" @click="(event) =>handleSelectResult(name, event)">
                 <span class="title">{{ name }}</span>
                 <div class="color" :style="{ background: item.color }">
                     {{ item.ids.length }}
@@ -22,15 +22,14 @@ export default {
     setup() {
         const { favorites } = useFavorites()
         const { operators } = useOperators()
+        const { filterElements } = useActions()
 
-        const { actions, filterElements} = useActions()
-
-        return { favorites, operators, actions, filterElements }
+        return { favorites, operators, filterElements }
     },
     props: ["elements", "filterviews", "selectedFilterview", "models"],
     data() {
         return {
-            selectedResult: null,
+            selectedResult: [],
             filterviewResult: {
                 visible: [],
                 color: [],
@@ -61,15 +60,25 @@ export default {
         },
     },
     methods: {
-        handleSelectResult(name) {
-            if (this.selectedResult === name) {
-                this.selectedResult = null;
+        handleSelectResult(name, event) {
+            if(event.ctrlKey){
+                if(this.selectedResult.includes(name)){
+                    this.selectedResult = this.selectedResult.filter(item => item !== name); 
+                } else {
+                    this.selectedResult.push(name); 
+                }
+            } else {
+                if(this.selectedResult.length > 1 || !this.selectedResult.includes(name)){
+                    this.selectedResult = [name]
+                } else {
+                    this.selectedResult = []
+                }
+            }
+
+            if(this.selectedResult.length === 0){
                 this.showFilterviewResult();
             } else {
-                this.selectedResult = name;
-                const ids = this.filterviewResult.autocolored[name].ids;
-                const color = this.filterviewResult.autocolored[name].color;
-                this.showAndColorElements(ids, color);
+                this.showAndColorSelectedResults()
             }
         },
         resetView(hide=false) {
@@ -103,13 +112,17 @@ export default {
             }
         },
         //should be merged with showFilterview...
-        showAndColorElements(ids, color = "#aaaaaa") {
+        showAndColorSelectedResults() {
+            let results = Object.entries(this.filterviewResult.autocolored).filter(([key, value]) => this.selectedResult.includes(key)).map(([key, value]) => value)
             //hide all Objects
             this.$viewer.state.hideObjects(this.$viewer.state.objects.map((item) => item.id));
-            //show selected ids
-            this.$viewer.state.showObjectsByUuids(ids);
-            //color elements
-            this.$viewer.state.colorizeObjectsByUuids(ids, color);
+            console.log(results)
+            for (const {color, ids} of results){
+                //show selected ids
+                this.$viewer.state.showObjectsByUuids(ids);
+                //color elements
+                this.$viewer.state.colorizeObjectsByUuids(ids, color);
+            }
         },
     },
 };
