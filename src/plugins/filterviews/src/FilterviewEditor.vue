@@ -333,7 +333,7 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-content: start;
+    align-content: flex-start;
     margin-bottom: 1em;
   }
 

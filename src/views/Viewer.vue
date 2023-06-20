@@ -20,8 +20,8 @@ import platformDemo from "@/plugins/platformDemo/src/platformDemo.plugin.js";
 import SnowflakesPlugin from "@/plugins/snowflakes/src/snowflakes.plugin.js";
 import SplitPlugin from "@/plugins/split/src/split.plugin.js";
 import SvgExtractorPlugin from "@/plugins/svgExtractor/src/svgExtractor.plugin.js";
-import IotPlugin from "@/plugins/iot/src/iot.plugin.js";
 import Filterviews from "@/plugins/filterviews/src/filterviews.plugin.js";
+import Roombook from "@/plugins/roombook/src/roombook.plugin.js";
 
 export default {
   data() {
@@ -65,11 +65,20 @@ export default {
     bimdataViewer.registerPlugin(SnowflakesPlugin);
     bimdataViewer.registerPlugin(SplitPlugin);
     bimdataViewer.registerPlugin(SvgExtractorPlugin);
-    bimdataViewer.registerPlugin(IotPlugin);
-    bimdataViewer.registerPlugin(Filterviews);
+/*     bimdataViewer.registerPlugin(Filterviews); */
+    bimdataViewer.registerPlugin(Roombook);
 
 
-    bimdataViewer.mount(`#${this.viewerId}`);
+    //Custom Layout for Roombook Plugin as Default Window on Startup
+    const customLayout = {
+      ratios: [50, 50],
+      direction: "column",
+      children: ["3d", "Roombook"],
+
+    };
+
+
+    bimdataViewer.mount(`#${this.viewerId}`, customLayout);
 
     this.$watch(
       () => this.oidcAccessToken,

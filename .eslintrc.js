@@ -21,6 +21,7 @@ module.exports = {
     quotes: ["off", "double", "avoid-escape"],
     semi: ["off", "always"],
     'vue/multi-word-component-names': 'off',
+    'vue/valid-v-for': 'off'
   },
   ignorePatterns: ["/dist"],
 };
